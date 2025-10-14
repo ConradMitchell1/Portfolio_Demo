@@ -1,0 +1,114 @@
+﻿@model MyCV_Demo.Models.CVModel
+<h1>Edit CV</h1>
+
+<form asp-action="Edit" method="post" enctype="multipart/form-data">
+    <div>
+        <label>Full Name</label>
+        <input asp-for="FullName" />
+    </div>
+
+    <div>
+        <label>Title</label>
+        <input asp-for="Title"/>
+    </div>
+
+    <div>
+        <label>Email</label>
+        <input asp-for="Email" type="email"/>
+        <span asp-validation-for="Email"></span>
+    </div>
+
+    <div>
+        <label>Location</label>
+        <input asp-for="Location"/>
+    </div>
+
+    <div>
+        <label>Summary</label>
+        <textarea asp-for="Summary"></textarea>
+    </div>
+
+    <!-- Skills -->
+
+    <h3>Skills</h3>
+    <div>
+        @for (int i = 0; i < Model.Skills?.Count; i++)
+        {
+            <div>
+                <input name="Skills[@i]" value="@Model.Skills[i]"/>
+                <button type="button" onclick="removeSkill(@i)">Remove</button>
+            </div>
+        }
+    </div>
+    <button type="button" onclick="addSkill()">Add Skill</button>
+    <button type="submit">Upload</button>
+
+    <!-- Work Experiences -->
+    <h3> Work History</h3>
+    <div>
+        @for(var i = 0; i < (Model.WorkExperiences?.Count ?? 0); i++)
+        {
+            <div>
+                <label>Company</label>
+                <input name="WorkExperiences[@i].Company" value="@Model.WorkExperiences[i].Company" />
+            </div>
+            <div>
+                <label>Position</label>
+                <input name="WorkExperiences[@i].Position" value="@Model.WorkExperiences[i].Position" />
+            </div>
+            @for(var j = 0; j < (Model.WorkExperiences[i]?.Responsibilities?.Count ?? 0); j++)
+            {
+                <div>
+                    <label>Responsibility @j</label>
+                    <input name="WorkExperiences[@i].Responsibilities[@j]" value="@Model.WorkExperiences[i].Responsibilities[j]" />
+                    <button type="button" onclick="removeResponsibility(@i, @j)">Remove Responsibility</button>
+                </div>
+            }
+            <button type="button" onclick="addResponsibility(@i)">Add Responsibility</button>
+            <div>
+                <label>Duration</label>
+                <textarea name="WorkExperiences[@i].Duration">@Model.WorkExperiences[i].Duration</textarea>
+            </div>
+            <div>
+                <label>Description</label>
+                <textarea name="WorkExperiences[@i].Description">@Model.WorkExperiences[i].Description</textarea>
+            </div>
+            <button type="button" onclick="removeExperience(@i)">Remove Experience</button>
+        }
+        <button type="button" onclick="addExperience()">Add Experience</button>
+    </div>
+
+    <!-- Educations -->
+    <h3> Education</h3>
+
+    <div>
+        @for(var i = 0; i < (Model.Educations?.Count ?? 0); i++)
+        {
+            <div>
+                <label>Institution</label>
+                <input name="Educations[@i].Institution" value="@Model.Educations[i].Institution" />
+            </div>
+            <div>
+                <label>Degree</label>
+                <input name="Educations[@i].Degree" value="@Model.Educations[i].Degree" />
+            </div>
+            <div>
+                <label> Year of Study </label>
+                <input name="Educations[@i].Year" value="@Model.Educations[i].Year" />
+            </div>
+            <button type="button" onclick="removeEducation(@i)">Remove Education</button>
+        }
+        <button type="button" onclick="addEducation()">Add Education</button>
+    </div>
+</form>
+
+<p><a asp-action="Index">Back to gallery</a></p>
+
+<!-- Scripts -->
+
+@section Scripts{
+    <script>
+        function 
+        // Add your JavaScript functions here
+    </script>
+}

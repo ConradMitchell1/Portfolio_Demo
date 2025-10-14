@@ -1,0 +1,23 @@
+﻿@model IEnumerable<MyCV_Demo.Models.GalleryResultModel>
+<h1>Gallery</h1>
+@if (Model == null)
+{
+    <p>No images uploaded yet.</p>
+    <p><a asp-action="UploadImage">Upload Image</a></p>
+}
+
+else
+{
+    <p><a asp-action="UploadImage">Upload Image</a></p>
+    <div>
+        @foreach(var item in Model)
+        {
+            <div style="margin-bottom:20px;">
+                <h3>@item.Title</h3>
+                <p>@item.Description</p>
+                <p>@item.ImagePath</p>
+                <img src="~/@item.ImagePath" alt="@item.Title"/>
+            </div>
+        }
+    </div>
+}
