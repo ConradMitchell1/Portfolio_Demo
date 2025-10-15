@@ -20,3 +20,25 @@ html {
 body {
   margin-bottom: 60px;
 }
+
+.form-grid{
+    display:grid;
+    grid-template-columns: 320px minmax(200px, 1fr);
+    gap: 10px 1px;
+    align-items:center;
+}
+.form-grid h3{grid-column: 1/ -1; margin: 16px 0 4px;}
+
+.form-grid input,
+.form-grid textarea,
+.form-grid select {
+    width: 100%;
+}
+
+.form-actions{grid-column: 1 / -1; display:flex; gap:8px;}
+
+.remove-skill-btn,
+.remove-resp-btn{
+    margin-top:4px;
+    margin-bottom:10px;
+}

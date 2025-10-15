@@ -17,7 +17,7 @@
     {
         public string Company { get; set; } = "";
         public string Position { get; set; } = "";
-        public List<string>? Responsibilities { get; set; } = new();
+        public List<string> Responsibilities { get; set; } = new();
         public string Duration { get; set; } = "";
         public string Description { get; set; } = "";
     }

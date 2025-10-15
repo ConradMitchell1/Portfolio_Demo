@@ -1,105 +1,117 @@
 ﻿@model MyCV_Demo.Models.CVModel
 <h1>Edit CV</h1>
 
-<form asp-action="Edit" method="post" enctype="multipart/form-data">
-    <div>
+<form id="cvForm" asp-action="Edit" method="post" enctype="multipart/form-data">
+    <div class="form-grid">
+        <div class="form-actions">
+            <button type="submit">Upload</button>
+        </div>
         <label>Full Name</label>
         <input asp-for="FullName" />
-    </div>
-
-    <div>
         <label>Title</label>
-        <input asp-for="Title"/>
-    </div>
+        <input asp-for="Title" />
 
-    <div>
         <label>Email</label>
-        <input asp-for="Email" type="email"/>
-        <span asp-validation-for="Email"></span>
-    </div>
+        <input asp-for="Email" type="email" />
 
-    <div>
         <label>Location</label>
-        <input asp-for="Location"/>
-    </div>
+        <input asp-for="Location" />
 
-    <div>
         <label>Summary</label>
         <textarea asp-for="Summary"></textarea>
-    </div>
 
-    <!-- Skills -->
+        <!-- Skills -->
 
-    <h3>Skills</h3>
-    <div>
-        @for (int i = 0; i < Model.Skills?.Count; i++)
-        {
-            <div>
-                <input name="Skills[@i]" value="@Model.Skills[i]"/>
-                <button type="button" onclick="removeSkill(@i)">Remove</button>
-            </div>
-        }
-    </div>
-    <button type="button" onclick="addSkill()">Add Skill</button>
-    <button type="submit">Upload</button>
-
-    <!-- Work Experiences -->
-    <h3> Work History</h3>
-    <div>
-        @for(var i = 0; i < (Model.WorkExperiences?.Count ?? 0); i++)
-        {
-            <div>
-                <label>Company</label>
-                <input name="WorkExperiences[@i].Company" value="@Model.WorkExperiences[i].Company" />
-            </div>
-            <div>
-                <label>Position</label>
-                <input name="WorkExperiences[@i].Position" value="@Model.WorkExperiences[i].Position" />
-            </div>
-            @for(var j = 0; j < (Model.WorkExperiences[i]?.Responsibilities?.Count ?? 0); j++)
-            {
-                <div>
-                    <label>Responsibility @j</label>
-                    <input name="WorkExperiences[@i].Responsibilities[@j]" value="@Model.WorkExperiences[i].Responsibilities[j]" />
-                    <button type="button" onclick="removeResponsibility(@i, @j)">Remove Responsibility</button>
+        <h3>Skills</h3>
+        <div id="skillList">
+            <button type="button" id="addSkillBtn">Add Skill</button>
+            <template id="skillProto">
+                <div class="skill-item">
+                    <input type="hidden" data-name="Skills.index" data-value="__SKILLKEY__" />
+                    <div>
+                        <label>Skill:</label>
+                        <input data-name="Skills[__SKILLKEY__]"/>
+                    </div>
+                    <button type="button" class="remove-skill-btn">Remove Skill</button>
                 </div>
-            }
-            <button type="button" onclick="addResponsibility(@i)">Add Responsibility</button>
-            <div>
-                <label>Duration</label>
-                <textarea name="WorkExperiences[@i].Duration">@Model.WorkExperiences[i].Duration</textarea>
-            </div>
-            <div>
-                <label>Description</label>
-                <textarea name="WorkExperiences[@i].Description">@Model.WorkExperiences[i].Description</textarea>
-            </div>
-            <button type="button" onclick="removeExperience(@i)">Remove Experience</button>
-        }
-        <button type="button" onclick="addExperience()">Add Experience</button>
-    </div>
+            </template>
+        </div>
 
-    <!-- Educations -->
-    <h3> Education</h3>
 
-    <div>
-        @for(var i = 0; i < (Model.Educations?.Count ?? 0); i++)
-        {
-            <div>
-                <label>Institution</label>
-                <input name="Educations[@i].Institution" value="@Model.Educations[i].Institution" />
-            </div>
-            <div>
-                <label>Degree</label>
-                <input name="Educations[@i].Degree" value="@Model.Educations[i].Degree" />
-            </div>
-            <div>
-                <label> Year of Study </label>
-                <input name="Educations[@i].Year" value="@Model.Educations[i].Year" />
-            </div>
-            <button type="button" onclick="removeEducation(@i)">Remove Education</button>
-        }
-        <button type="button" onclick="addEducation()">Add Education</button>
+
+        <!-- Work Experiences -->
+        <h3> Work History</h3>
+        <div id="workList">
+            <button type="button" id="addWorkBtn">Add Experience</button>
+            <template id="workProto">
+                <div class="work-item">
+                    <input type="hidden" data-name="WorkExperiences.index" data-value="__WORKKEY__" />
+                    <div>
+                        <label>Company</label>
+                        <input data-name="WorkExperiences[__WORKKEY__].Company" />
+                    </div>
+                    <div>
+                        <label>Position</label>
+                        <input data-name="WorkExperiences[__WORKKEY__].Position" />
+                    </div>
+                    <div>
+                        <label>Duration</label>
+                        <textarea data-name="WorkExperiences[__WORKKEY__].Duration"></textarea>
+                    </div>
+                    <div>
+                        <label>Description</label>
+                        <textarea data-name="WorkExperiences[__WORKKEY__].Description"></textarea>
+                    </div>
+                    <div class="resp-section">
+                        <h4>Responsibilities</h4>
+                        <button type="button" class="add-resp-btn">Add Responsibility</button>
+                        <div class="resp-list"></div>
+                        
+                        <template class="resp-proto">
+                            <div class="resp-item">
+                                <input type="hidden" data-name="WorkExperiences[__WORKKEY__].Responsibilities.index" data-value="__RESPKEY__" />
+                                <input data-name="WorkExperiences[__WORKKEY__].Responsibilities[__RESPKEY__]" placeholder="e.g, Led feature X" />
+                                <button type="button" class="remove-resp-btn">Remove</button>
+                            </div>
+                        </template>
+                    </div>
+
+                    
+                    <button type="button" class="remove-work-btn">Remove Experience</button>
+
+
+                </div>
+            </template>
+
+        </div>
+
+        <!-- Educations -->
+        <h3> Education</h3>
+
+        <div id="eduList">
+            <button type="button" id="addEduBtn">Add Education</button>
+            <template id="eduProto">
+                <div class="edu-item">
+                    <input type="hidden" data-name="Educations.index" data-value="__EDUKEY__" />
+                    <div>
+                        <label>Institution</label>
+                        <input data-name="Educations[__EDUKEY__].Institution" />
+                    </div>
+                    <div>
+                        <label>Degree</label>
+                        <input data-name="Educations[__EDUKEY__].Degree" />
+                    </div>
+                    <div>
+                        <label> Year of Study </label>
+                        <input data-name="Educations[__EDUKEY__].Year" />
+                    </div>
+                    <button type="button" class="remove-edu-btn">Remove Education</button>
+                </div>
+            </template>
+        </div>
     </div>
+    
+
 </form>
 
 <p><a asp-action="Index">Back to gallery</a></p>
@@ -108,7 +120,105 @@
 
 @section Scripts{
     <script>
-        function 
-        // Add your JavaScript functions here
+        // Generate a unique key for dynamically added items
+        function newKey() {
+          return 'k' + Date.now().toString(36) + Math.random().toString(36).slice(2);
+        }
+
+        document.addEventListener('DOMContentLoaded', function () {
+          const WorkList  = document.getElementById('workList');
+          const WorkProto = document.getElementById('workProto').content;
+
+          const EduList  = document.getElementById('eduList');
+          const EduProto = document.getElementById('eduProto').content;
+
+          const SkillList  = document.getElementById('skillList');
+          const SkillProto = document.getElementById('skillProto').content;
+
+          // ----- Add Skill -----
+          document.getElementById('addSkillBtn').addEventListener('click', () => {
+            const skillKey = newKey();
+            const node = document.importNode(SkillProto, true);
+            stampNames(node, '__SKILLKEY__', skillKey);
+            const skillItem = node.querySelector('.skill-item');
+            skillItem.querySelector('.remove-skill-btn').addEventListener('click', () => skillItem.remove());
+            SkillList.appendChild(node);
+          });
+
+          // ----- Add Education -----
+          document.getElementById('addEduBtn').addEventListener('click', () => {
+            const eduKey = newKey();
+            const node = document.importNode(EduProto, true);
+            stampNames(node, '__EDUKEY__', eduKey);
+            const eduItem = node.querySelector('.edu-item');
+            eduItem.querySelector('.remove-edu-btn').addEventListener('click', () => eduItem.remove());
+            EduList.appendChild(node);
+          });
+
+          // ----- Add Work Experience (+ nested Responsibilities) -----
+          document.getElementById('addWorkBtn').addEventListener('click', () => {
+            const workKey = newKey();
+            const node = document.importNode(WorkProto, true);
+            stampNames(node, '__WORKKEY__', workKey);
+
+            const workItem = node.querySelector('.work-item');
+            workItem.querySelector('.remove-work-btn').addEventListener('click', () => workItem.remove());
+
+            const respList = workItem.querySelector('.resp-list');
+            const respProto = workItem.querySelector('.resp-proto').content;
+
+            workItem.querySelector('.add-resp-btn').addEventListener('click', () => {
+              const respKey = newKey();
+              const rnode = document.importNode(respProto, true);
+              // IMPORTANT: stamp both tokens so __WORKKEY__ never leaks into the final name
+              stampNames(rnode, '__WORKKEY__', workKey);
+              stampNames(rnode, '__RESPKEY__', respKey);
+              rnode.querySelector('.remove-resp-btn').addEventListener('click', (e) => {
+                e.currentTarget.closest('.resp-item').remove();
+              });
+              respList.appendChild(rnode);
+            });
+
+            WorkList.appendChild(node);
+          });
+
+          // ----- Submit: Re-index everything to consecutive numeric indexes -----
+          const form = document.getElementById('cvForm');
+          form.addEventListener('submit', function () {
+            // Skills -> Skills[0], Skills[1], ...
+            const skillInputs = SkillList.querySelectorAll('.skill-item input[name^="Skills["]:not([type="hidden"])');
+            skillInputs.forEach((inp, i) => { inp.name = `Skills[${i}]`; });
+            SkillList.querySelectorAll('input[name="Skills.index"]').forEach(h => h.remove());
+
+            // WorkExperiences -> WorkExperiences[0].*, [1].*, ...
+            const workItems = WorkList.querySelectorAll('.work-item');
+            workItems.forEach((item, wi) => {
+              // Rename every field in this work item to use the numeric index
+              item.querySelectorAll('[name^="WorkExperiences["]').forEach(el => {
+                el.name = el.name.replace(/^WorkExperiences\[[^\]]+\]/, `WorkExperiences[${wi}]`);
+              });
+              // Remove the hidden index (no longer needed)
+              item.querySelectorAll('input[name="WorkExperiences.index"]').forEach(h => h.remove());
+
+              // Responsibilities inside this work item -> Responsibilities[0], [1], ...
+              const respInputs = item.querySelectorAll('.resp-list .resp-item input[name$="]"]:not([type="hidden"])');
+              respInputs.forEach((inp, ri) => {
+                inp.name = inp.name.replace(/Responsibilities\[[^\]]+\]/, `Responsibilities[${ri}]`);
+              });
+              item.querySelectorAll('input[name$=".Responsibilities.index"]').forEach(h => h.remove());
+            });
+          });
+
+          // ----- Utility: robust token replacement (avoids replaceAll quirks) -----
+          function stampNames(root, token, val) {
+            const repl = (s) => (s || '').split(token).join(val);
+            root.querySelectorAll('[data-name]').forEach(el => {
+              el.setAttribute('name', repl(el.getAttribute('data-name')));
+            });
+            root.querySelectorAll('[data-value]').forEach(el => {
+              el.setAttribute('value', repl(el.getAttribute('data-value')));
+            });
+          }
+        });
     </script>
 }
