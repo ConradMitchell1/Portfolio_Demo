@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using MyCV_Demo.Models;
+using System.Data.Entity.Core;
 
 namespace MyCV_Demo.Controllers
 {
@@ -25,21 +26,29 @@ namespace MyCV_Demo.Controllers
         }
         public TaxResultModel CalculateTax(TaxInputModel tm)
         {
-            var taxable = Math.Max(0, tm.AnnualIncome - tm.Deductions);
-            decimal rate = tm.CountryCode.ToUpper() switch
+            double tax = 0.0;
+            double income = tm.AnnualIncome;
+            double personalAllowance = 12570;
+
+            if(income <= personalAllowance)
             {
-                "Uk" => 0.20m,
-                "US" => 0.22m,
-                "FR" => 0.25m,
-                _ => 0.20m
-            };
-            var tax = taxable * rate;
+                tax = 0.0;
+            }
+            else if (income <= 50270)
+            {
+                tax = (income - personalAllowance) * 0.20;
+            }
+            else if (income <= 125140)
+            {
+                tax = (50270 - personalAllowance) * 0.20 + (income - 50270) * 0.40;
+            }
+            else
+            {
+                tax = (50270 - personalAllowance) * 0.20 + (125140 - 50270) * 0.40 + (income - 125140) * 0.45;
+            }
             return new TaxResultModel
             {
-                CountryCode = tm.CountryCode,
-                TaxYear = tm.TaxYear,
-                TaxableIncome = decimal.Round(taxable, 2),
-                TotalTax = decimal.Round(tax, 2)
+                Tax = tax
             };
         }
 

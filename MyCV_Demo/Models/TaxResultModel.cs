@@ -1,13 +1,11 @@
-﻿namespace MyCV_Demo.Models
+﻿using System.Security.Permissions;
+
+namespace MyCV_Demo.Models
 {
     public class TaxResultModel
     {
-        public string CountryCode { get; set; } = "";
-        public int TaxYear {  get; set; }
-
-        public decimal TaxableIncome { get; set; }
-        public decimal TotalTax { get; set; }
-
-        public decimal NetIncome => TaxableIncome - TotalTax;
+        public string CountryCode { get; set; } = "UK";
+        public int TaxYear { get; set; } = DateTime.UtcNow.Year;
+        public double Tax { get; set; }
     }
 }

@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using MyCV_Demo.Data;
 using MyCV_Demo.Models;
 
 namespace MyCV_Demo.Controllers
@@ -7,9 +8,11 @@ namespace MyCV_Demo.Controllers
     public class GalleryController : Controller
     {
         private readonly IWebHostEnvironment _env;
-        public GalleryController(IWebHostEnvironment env)
+        private readonly AppDbContext _db;
+        public GalleryController(IWebHostEnvironment env, AppDbContext db)
         {
             _env = env;
+            _db = db;
         }
         // GET: GalleryController
         [HttpGet]
@@ -81,6 +84,15 @@ namespace MyCV_Demo.Controllers
             {
                 vm.File.CopyTo(stream);
             }
+
+            var newGalleryItem = new GalleryResultModel
+            {
+                Title = vm.Title,
+                Description = vm.Description,
+                ImagePath = filePath
+            };
+            _db.GalleryItems.Add(newGalleryItem);
+            _db.SaveChanges();
             return RedirectToAction(nameof(Index));
         }
     }

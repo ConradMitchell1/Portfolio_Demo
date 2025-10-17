@@ -8,5 +8,13 @@ namespace MyCV_Demo.Controllers
         {
             return View();
         }
+        public IActionResult About()
+        {
+            return View();
+        }
+        public IActionResult Contact()
+        {
+            return View();
+        }
     }
 }

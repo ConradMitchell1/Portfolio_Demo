@@ -1,3 +1,6 @@
+using Microsoft.EntityFrameworkCore;
+using MyCV_Demo.Data;
+
 namespace MyCV_Demo
 {
     public class Program
@@ -8,6 +11,9 @@ namespace MyCV_Demo
 
             // Add services to the container.
             builder.Services.AddControllersWithViews();
+            builder.Services.AddDbContext<AppDbContext>(options => options.UseSqlServer( // Fix: UseSqlServer (capital U)
+                builder.Configuration.GetConnectionString("DefaultConnection")
+            ));
 
             var app = builder.Build();
 
